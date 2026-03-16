@@ -1,0 +1,38 @@
+{
+  "name": "Delivery Tracker - Java Dev",
+  "image": "mcr.microsoft.com/devcontainers/java:17",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installMaven": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-spring-boot-dashboard",
+        "github.copilot",
+        "github.copilot-chat"
+      ],
+      "settings": {
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-17",
+            "default": true
+          }
+        ]
+      }
+    }
+  },
+  "forwardPorts": [8080],
+  "postCreateCommand": "echo 'Ready! Open docs/SPEC.md and start with GitHub Copilot.'",
+  "portsAttributes": {
+    "8080": {
+      "label": "Delivery Tracker App",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}
