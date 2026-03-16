@@ -107,7 +107,7 @@
 | `create(recipientName, recipientAddress)` | `String, String` | `Delivery` | 新規登録・送り状番号を自動採番 |
 | `updateStatus(id, status)` | `Long, DeliveryStatus` | `Delivery` | ステータスを更新 |
 | `countByStatus(status)` | `DeliveryStatus` | `long` | ステータス別件数を返す |
-| `calcDelayedRate()` | `double` | - | 遅延率(%)を計算して返す |
+| `calcDelayedRate()` | - | `double` | 遅延率(%)を計算して返す |
 
 ### 送り状番号の採番ルール
 
