@@ -21,7 +21,6 @@
 | H2 Database | Spring Boot同梱 | インメモリDB（設定不要・起動即使用可能） |
 | Bootstrap | 5.x（CDN読み込み） | UIスタイリング |
 | Maven | 3.x | ビルドツール |
-| JUnit 5 | Spring Boot同梱 | テストフレームワーク |
 
 ---
 
@@ -40,12 +39,10 @@
 
 ### DeliveryStatus（Enum）
 
-| 値 | 表示名 | バッジ色（Bootstrap） |
-|---|---|---|
-| `PENDING` | 集荷待ち | `bg-secondary`（グレー） |
-| `IN_TRANSIT` | 配送中 | `bg-warning text-dark`（黄） |
-| `DELIVERED` | 配達完了 | `bg-success`（緑） |
-| `DELAYED` | 遅延 | `bg-danger`（赤） |
+| 値 | 表示名 |
+|---|---|
+| `PENDING` | 集荷待ち |
+| `DELIVERED` | 配達完了 |
 
 ---
 
@@ -54,24 +51,20 @@
 ### 画面イメージ
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│ 🚚 配送管理                                              │
-├─────────────────────────────────────────────────────────┤
-│ ステータスで絞り込み: [すべて ▼]                         │
-├──────────┬───────────┬───────────────┬──────────────────┤
-│ 送り状番号 │  受取人名  │  ステータス   │      操作        │
-├──────────┼───────────┼───────────────┼──────────────────┤
-│ TRK-0001 │ 山田 太郎  │ 🟡 配送中     │ [完了] [遅延]    │
-│ TRK-0002 │ 鈴木 花子  │ 🟢 配達完了   │                  │
-│ TRK-0003 │ 中村 健二  │ 🔴 遅延       │                  │
-│ TRK-0004 │ 高橋 美咲  │ ⚪ 集荷待ち   │ [配送中へ]       │
-└──────────┴───────────┴───────────────┴──────────────────┘
+┌──────────────────────────────────────────────────┐
+│ 🚚 配送管理                                       │
+├──────────┬───────────┬───────────┬────────────────┤
+│ 送り状番号 │  受取人名  │ ステータス │      操作      │
+├──────────┼───────────┼───────────┼────────────────┤
+│ TRK-0001 │ 山田 太郎  │ 集荷待ち   │ [配達完了にする] │
+│ TRK-0002 │ 鈴木 花子  │ 配達完了   │                │
+└──────────┴───────────┴───────────┴────────────────┘
 
-  ─── 新規登録フォーム ──────────────────────────────────
+  ─── 新規登録フォーム ─────────────────────────────
   受取人名   [                    ]
   届け先住所  [                    ]
                                [ 登録する ]
-  ───────────────────────────────────────────────────────
+  ──────────────────────────────────────────────────
 ```
 
 ### URL・エンドポイント一覧
@@ -79,20 +72,15 @@
 | HTTPメソッド | URL | 説明 |
 |---|---|---|
 | `GET` | `/` | 配送一覧表示（トップページ） |
-| `GET` | `/?status=IN_TRANSIT` | ステータスで絞り込み |
 | `POST` | `/deliveries` | 新規配送を登録 |
-| `POST` | `/deliveries/{id}/status` | ステータスを更新 |
+| `POST` | `/deliveries/{id}/complete` | ステータスを配達完了に更新 |
 
-### ステータス別 操作ボタン
+### 操作ボタン
 
-現在のステータスに応じて操作ボタンを動的に切り替える。
-
-| 現在のステータス | 表示するボタン | 遷移先ステータス |
-|---|---|---|
-| `PENDING` | [配送中へ] | `IN_TRANSIT` |
-| `IN_TRANSIT` | [完了] [遅延] | `DELIVERED` / `DELAYED` |
-| `DELIVERED` | （なし） | - |
-| `DELAYED` | （なし） | - |
+| 現在のステータス | 表示するボタン |
+|---|---|
+| `PENDING` | [配達完了にする] |
+| `DELIVERED` | （なし） |
 
 ---
 
@@ -103,11 +91,8 @@
 | メソッド名 | 引数 | 戻り値 | 説明 |
 |---|---|---|---|
 | `findAll()` | - | `List<Delivery>` | 全件取得（登録日時降順） |
-| `findByStatus(status)` | `DeliveryStatus` | `List<Delivery>` | ステータスで絞り込み |
 | `create(recipientName, recipientAddress)` | `String, String` | `Delivery` | 新規登録・送り状番号を自動採番 |
-| `updateStatus(id, status)` | `Long, DeliveryStatus` | `Delivery` | ステータスを更新 |
-| `countByStatus(status)` | `DeliveryStatus` | `long` | ステータス別件数を返す |
-| `calcDelayedRate()` | - | `double` | 遅延率(%)を計算して返す |
+| `markAsDelivered(id)` | `Long` | `Delivery` | ステータスを配達完了に更新 |
 
 ### 送り状番号の採番ルール
 
@@ -119,15 +104,12 @@
 
 ## 6. 初期データ
 
-アプリ起動時に以下の4件のデータが自動投入されること（`data.sql`）。
-4種類のステータスが全て揃っている状態にすること。
+アプリ起動時に以下の2件のデータが自動投入されること（`data.sql`）。
 
 | 送り状番号 | 受取人名 | 届け先住所 | ステータス |
 |---|---|---|---|
-| TRK-0001 | 山田 太郎 | 東京都新宿区西新宿1-1-1 | IN_TRANSIT |
+| TRK-0001 | 山田 太郎 | 東京都新宿区西新宿1-1-1 | PENDING |
 | TRK-0002 | 鈴木 花子 | 東京都渋谷区道玄坂2-2-2 | DELIVERED |
-| TRK-0003 | 中村 健二 | 埼玉県さいたま市大宮区3-3-3 | DELAYED |
-| TRK-0004 | 高橋 美咲 | 東京都品川区大崎4-4-4 | PENDING |
 
 ---
 
@@ -157,42 +139,4 @@ spring.h2.console.path=/h2-console
 
 # Thymeleaf
 spring.thymeleaf.cache=false
-```
-
----
-
-## 8. プロジェクト構成（完成形）
-
-GitHub Copilotで実装した後、以下の構成になることを期待する。
-
-```
-ghcp-handson/
-├── .devcontainer/
-│   └── devcontainer.json
-├── docs/
-│   ├── SPEC.md                              ← 本仕様書
-│   └── shipping-fee-spec.md                 ← Coding Agent課題用仕様書
-├── src/
-│   ├── main/
-│   │   ├── java/com/example/delivery/
-│   │   │   ├── DeliveryTrackerApplication.java
-│   │   │   ├── controller/
-│   │   │   │   └── DeliveryController.java
-│   │   │   ├── service/
-│   │   │   │   └── DeliveryService.java
-│   │   │   ├── repository/
-│   │   │   │   └── DeliveryRepository.java
-│   │   │   └── model/
-│   │   │       ├── Delivery.java
-│   │   │       └── DeliveryStatus.java
-│   │   └── resources/
-│   │       ├── templates/
-│   │       │   └── index.html
-│   │       ├── application.properties
-│   │       └── data.sql
-│   └── test/
-│       └── java/com/example/delivery/
-│           └── service/
-│               └── DeliveryServiceTest.java
-└── pom.xml
 ```
