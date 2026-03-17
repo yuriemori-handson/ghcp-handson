@@ -25,7 +25,6 @@ GitHub Copilot ハンズオン勉強会用のリポジトリです。
 | ファイル | 内容 |
 |---|---|
 | [`docs/SPEC.md`](docs/SPEC.md) | アプリケーション仕様書（ハンズオンのメイン素材） |
-| [`docs/shipping-fee-spec.md`](docs/shipping-fee-spec.md) | 料金計算仕様書（Coding Agent課題用） |
 
 ---
 
