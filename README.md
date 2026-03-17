@@ -1,2 +1,61 @@
-# ghcp-handson
-GitHub Copilotのハンズオン用リポジトリ
+# 🚚 Delivery Tracker - GitHub Copilot ハンズオン
+
+## このリポジトリについて
+
+GitHub Copilot ハンズオン勉強会用のリポジトリです。  
+**「仕様書だけを渡して、GitHub Copilotだけでどこまでアプリが作れるか」** を体験します。
+
+> ✅ このリポジトリには最初、コードが一切ありません。  
+> Copilotと一緒に、仕様書からゼロでアプリを作り上げましょう！
+
+---
+
+## 🚀 はじめ方（Codespaces推奨）
+
+1. このページ右上の **「Code」** ボタンをクリック
+2. **「Codespaces」** タブを選択
+3. **「Create codespace on main」** をクリック
+4. ブラウザ上でVSCodeが起動するまで待つ（約1〜2分）
+5. `docs/SPEC.md` を開いてハンズオン開始！
+
+---
+
+## 📄 ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [`docs/SPEC.md`](docs/SPEC.md) | アプリケーション仕様書（ハンズオンのメイン素材） |
+| [`docs/shipping-fee-spec.md`](docs/shipping-fee-spec.md) | 料金計算仕様書（Coding Agent課題用） |
+
+---
+
+## 🎯 ハンズオンの流れ
+
+```
+📄 仕様書（SPEC.md）だけがある状態からスタート
+        │
+        ▼
+① Plan モード
+   「この仕様書を読んで実装計画を立てて」
+        │
+        ▼
+② Agent モード
+   「この計画で実装して」→ コードが自動生成される！
+        │
+        ▼
+③ アプリを起動して動作確認
+   $ mvn spring-boot:run
+   → http://localhost:8080 をブラウザで開く
+        │
+        ▼
+④ Ask モード
+   「このコードの構造を日本語で説明して」
+        │
+        ▼
+⑤ Coding Agent
+   Issueを立てて追加機能を自律実装させる
+        │
+        ▼
+⑥ Code to Doc
+   「このアプリのユーザー向けマニュアルを作って」
+```
